@@ -19,21 +19,40 @@ class Project
 	
 	/**
      * Many Projects have One User.
-     * @ORM\ManyToOne(targetEntity="User")
-     * @ORM\JoinColumn(name="user_id", referencedColumnName="id")
+     * @ORM\ManyToOne(targetEntity="User", inversedBy="projects")
+     * @ORM\JoinColumn(name="user_id", referencedColumnName="id", nullable=false)
      */
     private $user;
 	
+	
+	/**
+     * Project has many Sections
+     * 
+     * @var \Doctrine\Common\Collections\ArrayCollection
+     * @ORM\OneToMany(targetEntity="Section", mappedBy="project")
+     */
+    protected $sections;
+	
+	/**
+     * Project has many Characters
+     * 
+     * @var \Doctrine\Common\Collections\ArrayCollection
+     * @ORM\OneToMany(targetEntity="Character", mappedBy="project")
+     */
+    protected $characters;
+
 	/**
      * @ORM\Column(type="string", length=200)
      */
 	private $title;
 	
 	/**
-     * @ORM\Column(type="text")
+     * @ORM\Column(type="text", nullable=true)
      */
 	private $description;
 
+
+	
     /**
      * Get id
      *
@@ -114,5 +133,81 @@ class Project
     public function getUser()
     {
         return $this->user;
+    }
+    /**
+     * Constructor
+     */
+    public function __construct()
+    {
+        $this->sections = new \Doctrine\Common\Collections\ArrayCollection();
+        $this->characters = new \Doctrine\Common\Collections\ArrayCollection();
+    }
+
+    /**
+     * Add section
+     *
+     * @param \AppBundle\Entity\Section $section
+     *
+     * @return Project
+     */
+    public function addSection(\AppBundle\Entity\Section $section)
+    {
+        $this->sections[] = $section;
+
+        return $this;
+    }
+
+    /**
+     * Remove section
+     *
+     * @param \AppBundle\Entity\Section $section
+     */
+    public function removeSection(\AppBundle\Entity\Section $section)
+    {
+        $this->sections->removeElement($section);
+    }
+
+    /**
+     * Get sections
+     *
+     * @return \Doctrine\Common\Collections\Collection
+     */
+    public function getSections()
+    {
+        return $this->sections;
+    }
+
+    /**
+     * Add character
+     *
+     * @param \AppBundle\Entity\Character $character
+     *
+     * @return Project
+     */
+    public function addCharacter(\AppBundle\Entity\Character $character)
+    {
+        $this->characters[] = $character;
+
+        return $this;
+    }
+
+    /**
+     * Remove character
+     *
+     * @param \AppBundle\Entity\Character $character
+     */
+    public function removeCharacter(\AppBundle\Entity\Character $character)
+    {
+        $this->characters->removeElement($character);
+    }
+
+    /**
+     * Get characters
+     *
+     * @return \Doctrine\Common\Collections\Collection
+     */
+    public function getCharacters()
+    {
+        return $this->characters;
     }
 }
