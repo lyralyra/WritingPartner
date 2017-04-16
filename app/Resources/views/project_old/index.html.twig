@@ -1,0 +1,42 @@
+
+{% extends 'base.html.twig' %}
+
+
+{% block body %}
+<div class="container">
+    <div class="row">
+        <div class="col-md-10 col-md-offset-1">
+            <div class="panel panel-success">
+                <div class="panel-heading">
+					List of Projects 
+					<a href="{{ path('project_create') }}" class="btn btn-info"><i class="fa fa-plus"></i> Create a new project</a>
+				</div>
+
+                  <table class="table">
+                      <tr>
+                          <th>Actions</th>
+                          <th>Project</th>
+                          <th>Description</th>
+                      </tr>
+
+                      {% for project in projects %}
+                        <tr>
+						  <td>
+							<a href="{{ path('project_edit', {'id':project.id}) }}" ><i class="fa fa-edit"></i></a> <!-- might be deleted and update in project show -->
+							<a href="{{ path('project_delete', {'id':project.id}) }}" ><i class="fa fa-delete"></i></a>
+						  </td>
+                          <td>
+							<a href="{{ path('project_show', {'id':project.id}) }}" >{{ project.title }}</a>
+						  </td>
+						  <td>{{ project.description }}</td>
+                        </tr>
+                      {% endfor %}
+                  </table>
+
+
+            </div>
+
+        </div>
+    </div>
+</div>
+{% endblock %}

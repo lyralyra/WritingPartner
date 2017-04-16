@@ -1,0 +1,10 @@
+.no-bullets {
+  list-style: none;
+}
+
+.inline-list{
+	padding-left:0px;
+}
+.inline-list li{
+	display:inline-block;
+}

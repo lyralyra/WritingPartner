@@ -2,23 +2,56 @@
 <html>
     <head>
         <meta charset="UTF-8" />
-        <title>{% block title %}Welcome!{% endblock %}</title>
-        {% block stylesheets %}{% endblock %}
+        <title>{% block title %}Writing Partner{% endblock %}</title>
+        {% block stylesheets %}
+		<link href="{{ asset('assets/vendor/bootstrap/dist/css/bootstrap.min.css') }}" rel="stylesheet"/>
+		<link href="{{ asset('assets/vendor/components-font-awesome/css/font-awesome.min.css') }}" rel="stylesheet"/>
+		<link href="{{ asset('assets/css/style.css') }}" rel="stylesheet"/>
+		{% endblock %}
         <link rel="icon" type="image/x-icon" href="{{ asset('favicon.ico') }}" />
-    </head>
+	</head>
     <body>
-		<div id="sidebar">
-            {% block sidebar %}
-                <ul>
-                    <li><a href="/">Home</a></li>
-                    <li><a href="/project">Projects</a></li>
-                </ul>
-            {% endblock %}
-        </div>
+		<nav class="navbar navbar-default">
+			<div class="container-fluid">
+				<div class="navbar-header">
+				    <button type="button" class="navbar-toggle collapsed" data-toggle="collapse" data-target="#bs-example-navbar-collapse-1" aria-expanded="false">
+						<span class="sr-only">Toggle navigation</span>
+						<span class="icon-bar"></span>
+						<span class="icon-bar"></span>
+						<span class="icon-bar"></span>
+					</button>
+					<a class="navbar-brand" href="/">Writing Partner</a>
+				</div>
+				<div class="collapse navbar-collapse" id="bs-example-navbar-collapse-1">
+					<ul class="nav navbar-nav navbar-left">
+						<li><a href="{{ path('project_index') }}" class="{% if app.request.attributes.get('_route') == 'project_index' %}active{% endif %}">Home</a></li>
+					</ul>
+					{% if app.user == null %}
+					<ul class="nav navbar-nav navbar-right">
+						<li><a href="{{ path('login') }}" class="{% if app.request.attributes.get('_route') == 'login' %}active{% endif %}">Login</a></li>
+						<li><a href="{{ path('register') }}" class="{% if app.request.attributes.get('_route') == 'register' %}active{% endif %}">Register</a></li>
+					</ul>
+					{% else %}	  
+					<ul class="nav navbar-nav navbar-right">
+						<li><a href="{{ path('logout') }}" class="{% if app.request.attributes.get('_route') == 'logout' %}active{% endif %}"><i class="fa fa-sign-out" aria-hidden="true"></i></a></li>
+					</ul>
+					<p class="navbar-text navbar-right">Signed in as <a href="{{ path('project_index') }}" class="navbar-link">{{app.user.name}}</a></p>
+					{% endif %}
+				</div>
+			</div>
+		</nav>
 
         <div id="content">
-            {% block body %}{% endblock %}
+			{% if app.user == null and app.request.attributes.get('_route') != 'login' and app.request.attributes.get('_route') != 'register' %}
+				<a href="{{ path('login') }}" class="btn btn-info">Log in to create projects!</a>
+            {% else %}
+				{% block body %}{% endblock %}
+			{% endif %}
         </div>
-        {% block javascripts %}{% endblock %}
+        {% block javascripts %}
+		<script src="{{ asset('assets/vendor/jquery/dist/jquery.min.js') }}"></script>
+		<script src="{{ asset('assets/vendor/bootstrap/dist/js/bootstrap.min.js') }}"></script>
+		<script src="{{ asset('assets/js/custom.js') }}"></script>
+		{% endblock %}
     </body>
 </html>

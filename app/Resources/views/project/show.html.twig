@@ -1,0 +1,32 @@
+{% extends 'base.html.twig' %}
+
+{% block body %}
+    <h1>Project</h1>
+
+    <table class="table">
+        <tbody>
+            <tr>
+                <th>Title</th>
+                <td>{{ project.title }}</td>
+            </tr>
+            <tr>
+                <th>Description</th>
+                <td>{{ project.description }}</td>
+            </tr>
+        </tbody>
+    </table>
+
+    <ul class="no-bullets inline-list">
+        <li>
+            <a href="{{ path('project_index') }}" class="btn btn-primary" ><i class="fa fa-arrow-left"></i> Back to your projects</a>
+        </li>
+        <li>
+            <a href="{{ path('project_edit', { 'id': project.id }) }}" class="btn btn-primary" ><i class="fa fa-edit"></i> Edit</a>
+        </li>
+        <li>
+            {{ form_start(delete_form) }}
+                <button type="submit" class="btn btn-danger"><i class="fa fa-trash"></i> Delete</button>
+            {{ form_end(delete_form) }}
+        </li>
+    </ul>
+{% endblock %}
