@@ -1,16 +1,14 @@
 {% extends 'base.html.twig' %}
 
 {% block body %}
+    <a href="{{ path('project_show', {'id': section.project.id }) }}" class="btn btn-primary" ><i class="fa fa-arrow-left"></i> Back to the project</a>
+
     <h1>Section creation</h1>
 
     {{ form_start(form) }}
         {{ form_widget(form) }}
+        <input type="hidden" name="projectId" value="{{projectId}}" />
         <input type="submit" value="Create" />
     {{ form_end(form) }}
 
-    <ul>
-        <li>
-            <a href="{{ path('section_index') }}">Back to the list</a>
-        </li>
-    </ul>
 {% endblock %}

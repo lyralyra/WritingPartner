@@ -6,6 +6,7 @@ use AppBundle\Entity\Character;
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Method;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Route;use Symfony\Component\HttpFoundation\Request;
+use Sensio\Bundle\FrameworkExtraBundle\Configuration\ParamConverter;
 
 /**
  * Character controller.
@@ -34,12 +35,17 @@ class CharacterController extends Controller
     /**
      * Creates a new character entity.
      *
-     * @Route("/new", name="character_new")
+     * @Route("/new/{projectId}", name="character_new")
      * @Method({"GET", "POST"})
      */
-    public function newAction(Request $request)
+    public function newAction(Request $request, $projectId)
     {
         $character = new Character();
+		$em = $this->getDoctrine()->getManager();
+		//error if no $projectId
+		$project = $em->getRepository('AppBundle:Project')->find($projectId);
+		//error if no $project
+		$character->addProject($project);
         $form = $this->createForm('AppBundle\Form\CharacterType', $character);
         $form->handleRequest($request);
 
@@ -47,13 +53,19 @@ class CharacterController extends Controller
             $em = $this->getDoctrine()->getManager();
             $em->persist($character);
             $em->flush();
-
+			
+			$project->addCharacter($character);
+			$em->persist($project);
+            $em->flush();
+			
             return $this->redirectToRoute('character_show', array('id' => $character->getId()));
         }
 
+		
         return $this->render('character/new.html.twig', array(
             'character' => $character,
             'form' => $form->createView(),
+			'projectId' => $projectId
         ));
     }
 

@@ -5,7 +5,10 @@ namespace AppBundle\Controller;
 use AppBundle\Entity\Section;
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Method;
-use Sensio\Bundle\FrameworkExtraBundle\Configuration\Route;use Symfony\Component\HttpFoundation\Request;
+use Sensio\Bundle\FrameworkExtraBundle\Configuration\Route;
+use Symfony\Component\HttpFoundation\Request;
+use Sensio\Bundle\FrameworkExtraBundle\Configuration\ParamConverter;
+
 
 /**
  * Section controller.
@@ -34,17 +37,22 @@ class SectionController extends Controller
     /**
      * Creates a new section entity.
      *
-     * @Route("/new", name="section_new")
+     * @Route("/new/{projectId}", name="section_new")
      * @Method({"GET", "POST"})
      */
-    public function newAction(Request $request)
+    public function newAction(Request $request, $projectId)
     {
         $section = new Section();
-        $form = $this->createForm('AppBundle\Form\SectionType', $section);
+        $em = $this->getDoctrine()->getManager();
+		//error if no $projectId
+		$project = $em->getRepository('AppBundle:Project')->find($projectId);
+		//error if no $project
+		$section->setProject($project);
+		
+		$form = $this->createForm('AppBundle\Form\SectionType', $section);
         $form->handleRequest($request);
 
         if ($form->isSubmitted() && $form->isValid()) {
-            $em = $this->getDoctrine()->getManager();
             $em->persist($section);
             $em->flush();
 
@@ -54,6 +62,7 @@ class SectionController extends Controller
         return $this->render('section/new.html.twig', array(
             'section' => $section,
             'form' => $form->createView(),
+			'projectId' => $projectId
         ));
     }
 

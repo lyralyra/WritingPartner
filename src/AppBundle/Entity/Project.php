@@ -34,10 +34,11 @@ class Project
     protected $sections;
 	
 	/**
-     * Project has many Characters
+     * Many Project have many Characters
      * 
      * @var \Doctrine\Common\Collections\ArrayCollection
-     * @ORM\OneToMany(targetEntity="Character", mappedBy="project")
+     * @ORM\ManyToMany(targetEntity="Character", inversedBy="projects")
+	 * @ORM\JoinTable(name="project_characters")
      */
     protected $characters;
 

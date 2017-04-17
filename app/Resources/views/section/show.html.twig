@@ -1,14 +1,24 @@
 {% extends 'base.html.twig' %}
 
 {% block body %}
-    <h1>Section</h1>
+    <a href="{{ path('project_show', {'id': section.project.id }) }}" class="btn btn-primary" ><i class="fa fa-arrow-left"></i> Back to the project</a>
 
-    <table>
+    <h1>
+		Section
+		<ul class="no-bullets inline-list">
+			<li>
+				<a href="{{ path('section_edit', { 'id': section.id }) }}" class="btn btn-primary" ><i class="fa fa-edit"></i> Edit</a>
+			</li>
+			<li>
+				{{ form_start(delete_form) }}
+					<button type="submit" class="btn btn-danger"><i class="fa fa-trash"></i> Delete</button>
+				{{ form_end(delete_form) }}
+			</li>
+		</ul>	
+	</h1>
+
+    <table class="table">
         <tbody>
-            <tr>
-                <th>Id</th>
-                <td>{{ section.id }}</td>
-            </tr>
             <tr>
                 <th>Title</th>
                 <td>{{ section.title }}</td>
@@ -20,17 +30,4 @@
         </tbody>
     </table>
 
-    <ul>
-        <li>
-            <a href="{{ path('section_index') }}">Back to the list</a>
-        </li>
-        <li>
-            <a href="{{ path('section_edit', { 'id': section.id }) }}">Edit</a>
-        </li>
-        <li>
-            {{ form_start(delete_form) }}
-                <input type="submit" value="Delete">
-            {{ form_end(delete_form) }}
-        </li>
-    </ul>
 {% endblock %}

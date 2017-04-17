@@ -5,7 +5,7 @@
 		<a href="{{ path('project_new') }}" class="btn btn-success"><i class="fa fa-plus"></i> Create a new project</a>
 	</h1>
 
-	{% if projects.count>0 %}
+	{% if not(projects is empty) %}
 
 		<table class="table">
 			<thead>

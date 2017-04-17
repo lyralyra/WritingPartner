@@ -6,7 +6,7 @@ use Doctrine\ORM\Mapping as ORM;
 
 /**
  * @ORM\Entity
- * @ORM\Table(name="character")
+ * @ORM\Table(name="`character`")
 */
 class Character
 {
@@ -17,12 +17,11 @@ class Character
      */	
 	private $id;
 	
-		/**
-     * Many Characters have One Project.
-     * @ORM\ManyToOne(targetEntity="Project", inversedBy="characters")
-     * @ORM\JoinColumn(name="project_id", referencedColumnName="id", nullable=false)
+	/**
+     * Many Characters have Many Project.
+     * @ORM\ManyToMany(targetEntity="Project", mappedBy="characters")
      */
-    private $project;
+    private $projects;
 		
 	/**
      * @ORM\Column(type="string", length=200)
@@ -30,7 +29,7 @@ class Character
 	private $firstname;
 	
 	/**
-     * @ORM\Column(type="string", length=200)
+     * @ORM\Column(type="string", length=200, nullable=true)
      */
 	private $lastname;
 
@@ -124,26 +123,44 @@ class Character
     }
 
     /**
-     * Set project
+     * Constructor
+     */
+    public function __construct()
+    {
+        $this->projects = new \Doctrine\Common\Collections\ArrayCollection();
+    }
+
+    /**
+     * Add project
      *
      * @param \AppBundle\Entity\Project $project
      *
      * @return Character
      */
-    public function setProject(\AppBundle\Entity\Project $project)
+    public function addProject(\AppBundle\Entity\Project $project)
     {
-        $this->project = $project;
+        $this->projects[] = $project;
 
         return $this;
     }
 
     /**
-     * Get project
+     * Remove project
      *
-     * @return \AppBundle\Entity\Project
+     * @param \AppBundle\Entity\Project $project
      */
-    public function getProject()
+    public function removeProject(\AppBundle\Entity\Project $project)
     {
-        return $this->project;
+        $this->projects->removeElement($project);
+    }
+
+    /**
+     * Get projects
+     *
+     * @return \Doctrine\Common\Collections\Collection
+     */
+    public function getProjects()
+    {
+        return $this->projects;
     }
 }

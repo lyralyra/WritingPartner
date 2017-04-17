@@ -29,11 +29,10 @@
     </table>
 	
 
+	{% include "character/list.html.twig" with {'characters': project.characters} %}
 
 	
 	{% include "section/list.html.twig" with {'sections': project.sections} %}
-
-		{% include "character/list.html.twig" with {'characters': project.characters} %}
 
 
 {% endblock %}
